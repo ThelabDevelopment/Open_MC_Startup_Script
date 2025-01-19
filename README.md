@@ -1,3 +1,4 @@
+[TH]()
 # Open MC Startup Script
 Open Source Startup Script For Minecraft Server + Any Jar File
 
@@ -8,3 +9,9 @@ Open Source Startup Script For Minecraft Server + Any Jar File
 📀 Bypass Mode If --bypass or -bp to run built-in config
 
 Edited From [Nullxz Minecraft Startup Script](https://github.com/nullxz/minecraft-start-script)
+
+## How To Use
+[TH Wiki]()
+[EN Wili]()
+[TH Readme Guide]()
+[EN Readme Guide]()
