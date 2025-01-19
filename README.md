@@ -1,6 +1,6 @@
 # Open MC Startup Script 
 
-The Startup Script That Automatically Setup
+The Startup Script That Automatically Start Server
 
 ## 🖥️ Added Features
 - 💿 Pre Configure .env file automatically
