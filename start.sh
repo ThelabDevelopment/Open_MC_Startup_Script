@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Version
+VERSION="0.0.1"
+
 # Default predefined values (for bypass mode)
 BYPASS_MODE="tmux"
 BYPASS_RAM_GB="2"
@@ -7,6 +10,10 @@ BYPASS_JAR_FILE="server.jar"
 BYPASS_CURRENT_DIR="."
 BYPASS_SESSION_NAME="Minecraft_Server"
 COMMAND="java -jar -Xmx${RAM_GB} ${JAR_FILE} -nogui"
+
+# Display the version before booting
+echo "Version: $VERSION"
+sleep 1  # Delay by 1 second
 
 # Check if .env exists; if not, create it
 if [ ! -f .env ]; then
@@ -41,8 +48,8 @@ if [ ! -f .env ]; then
     echo "CURRENT_DIR=\"$CURRENT_DIR\"" >> .env
 else
     echo "Loading configuration from .env..."
-    # Load from .env file (normal variables)
-    source .env
+    # Use `.` to load variables from .env file (for compatibility with sh)
+    . .env
 fi
 
 # Validate if all necessary variables are loaded correctly
