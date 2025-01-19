@@ -9,6 +9,7 @@ BYPASS_RAM_GB="2"
 BYPASS_JAR_FILE="server.jar"
 BYPASS_CURRENT_DIR="."
 BYPASS_SESSION_NAME="Minecraft_Server"
+ENV_DIR="${BYPASS_CURRENT_DIR}.env
 COMMAND="java -jar -Xmx${RAM_GB} ${JAR_FILE} -nogui"
 
 # Display the version before booting
@@ -46,10 +47,12 @@ if [ ! -f .env ]; then
     echo "RAM_GB=\"$RAM_GB\"" >> .env
     echo "JAR_FILE=\"$JAR_FILE\"" >> .env
     echo "CURRENT_DIR=\"$CURRENT_DIR\"" >> .env
+    echo "Preserving DIR Locally"
+    BYPASS_CURRENT_DIR="$CURRENT_DIR"
 else
     echo "Loading configuration from .env..."
     # Use `.` to load variables from .env file (for compatibility with sh)
-    . .env
+    . $ENV_DIR
 fi
 
 # Validate if all necessary variables are loaded correctly
