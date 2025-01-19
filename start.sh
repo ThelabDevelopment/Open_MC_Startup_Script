@@ -1,6 +1,6 @@
 #!/bin/sh
 # easter egg
-Attempt_Count=0
+Attempt_Count=${Attempt_Count + 1}
 # screen or tmux
 MODE="${SEPERATE_SCREEN_TYPE}"
 # MyServer_1_7_9
@@ -10,13 +10,13 @@ COMMAND="java -jar -Xmx${RAM_GB} ${JAR_FILE} -nogui"
 # /home/peipei/minecraft-server
 WORK_DIR="${CURRENT_DIR}"
 
-echo "This Is Not Working Yet"
-Attempt_Count = ${Attempt_Count} + 1
-exit 1
 
 if [ $Attempt_Count => 3 ]; then
     echo "Why You Attempting \nThis Build Is Broken Bruh"
 fi
+
+echo "This Is Not Working Yet"
+exit 1
 
 # Source the .env file
 if [ -f .env ]; then
