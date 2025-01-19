@@ -8,6 +8,9 @@ COMMAND="java -jar -Xmx${RAM_GB} ${JAR_FILE} -nogui"
 # /home/peipei/minecraft-server
 WORK_DIR="${CURRENT_DIR}"
 
+echo "This Is Not Working Yet"
+exit 1
+
 # Source the .env file
 if [ -f .env ]; then
     set -o allexport
