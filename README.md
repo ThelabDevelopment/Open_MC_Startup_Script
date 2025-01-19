@@ -15,7 +15,7 @@ Edited From [Nullxz Minecraft Startup Script](https://github.com/nullxz/minecraf
 ## How To Use
 [TH Wiki]()
 
-[EN Wili]()
+[EN Wiki]()
 
 [TH Readme Guide]()
 
