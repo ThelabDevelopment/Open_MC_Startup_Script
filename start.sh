@@ -132,7 +132,7 @@ else
     fi
 fi
 
-# Show the current configuration setup
+# Show the current configuration before startup
 echo "---- Current Configuration ----"
 echo "Server Name: $SESSION_NAME"
 echo "Session Manager: $MODE"
@@ -175,6 +175,7 @@ echo "\033[1;33m[INFO] \033[1;32mStarting Minecraft Server in $MODE session..."
 case $MODE in
     tmux)
         tmux kill-session -t "$SESSION_NAME" 2>/dev/null
+        sleep 1
         tmux new-session -d -s "$SESSION_NAME" "$COMMAND"
         ;;
     screen)
@@ -193,4 +194,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Display control instructions
-echo "\033[
+echo "\033[1;32mMinecraft server started in $MODE session!"
+echo "To attach to the session, use the following command:"
+echo "  $MODE attach -t $SESSION_NAME"
+echo "To detach, use Ctrl+b (tmux) or Ctrl+a (screen), followed by d."
