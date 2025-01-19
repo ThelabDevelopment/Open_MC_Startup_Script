@@ -9,7 +9,7 @@ BYPASS_RAM_GB="2"
 BYPASS_JAR_FILE="server.jar"
 BYPASS_CURRENT_DIR="."
 BYPASS_SESSION_NAME="Minecraft_Server"
-ENV_DIR="${BYPASS_CURRENT_DIR}.env
+ENV_DIR="${BYPASS_CURRENT_DIR}/.env"  # Fixed the missing quote
 COMMAND="java -jar -Xmx${RAM_GB} ${JAR_FILE} -nogui"
 
 # Display the version before booting
@@ -17,7 +17,7 @@ echo "Version: $VERSION"
 sleep 1  # Delay by 1 second
 
 # Check if .env exists; if not, create it
-if [ ! -f .env ]; then
+if [ ! -f "$ENV_DIR" ]; then
     echo ".env not found. Setting up new configuration..."
 
     # Prompt for `SESSION_NAME`
@@ -41,23 +41,23 @@ if [ ! -f .env ]; then
     read -r CURRENT_DIR
 
     # Save the user input to .env file (normal variables)
-    echo "Saving configuration to .env..."
-    echo "SESSION_NAME=\"$SESSION_NAME\"" > .env
-    echo "MODE=\"$MODE\"" >> .env
-    echo "RAM_GB=\"$RAM_GB\"" >> .env
-    echo "JAR_FILE=\"$JAR_FILE\"" >> .env
-    echo "CURRENT_DIR=\"$CURRENT_DIR\"" >> .env
+    echo "Saving configuration to $ENV_DIR..."
+    echo "SESSION_NAME=\"$SESSION_NAME\"" > "$ENV_DIR"
+    echo "MODE=\"$MODE\"" >> "$ENV_DIR"
+    echo "RAM_GB=\"$RAM_GB\"" >> "$ENV_DIR"
+    echo "JAR_FILE=\"$JAR_FILE\"" >> "$ENV_DIR"
+    echo "CURRENT_DIR=\"$CURRENT_DIR\"" >> "$ENV_DIR"
     echo "Preserving DIR Locally"
     BYPASS_CURRENT_DIR="$CURRENT_DIR"
 else
-    echo "Loading configuration from .env..."
+    echo "Loading configuration from $ENV_DIR..."
     # Use `.` to load variables from .env file (for compatibility with sh)
-    . $ENV_DIR
+    . "$ENV_DIR"
 fi
 
 # Validate if all necessary variables are loaded correctly
 if [ -z "$SESSION_NAME" ] || [ -z "$MODE" ] || [ -z "$RAM_GB" ] || [ -z "$JAR_FILE" ] || [ -z "$CURRENT_DIR" ]; then
-    echo "Error: Missing required variables from .env. Please check the .env file."
+    echo "Error: Missing required variables from $ENV_DIR. Please check the .env file."
     exit 1
 fi
 
@@ -123,12 +123,12 @@ else
         fi
 
         # Save the user input to .env file (normal variables)
-        echo "Saving configuration to .env..."
-        echo "SESSION_NAME=\"$SESSION_NAME\"" > .env
-        echo "MODE=\"$MODE\"" >> .env
-        echo "RAM_GB=\"$RAM_GB\"" >> .env
-        echo "JAR_FILE=\"$JAR_FILE\"" >> .env
-        echo "CURRENT_DIR=\"$CURRENT_DIR\"" >> .env
+        echo "Saving configuration to $ENV_DIR..."
+        echo "SESSION_NAME=\"$SESSION_NAME\"" > "$ENV_DIR"
+        echo "MODE=\"$MODE\"" >> "$ENV_DIR"
+        echo "RAM_GB=\"$RAM_GB\"" >> "$ENV_DIR"
+        echo "JAR_FILE=\"$JAR_FILE\"" >> "$ENV_DIR"
+        echo "CURRENT_DIR=\"$CURRENT_DIR\"" >> "$ENV_DIR"
     fi
 fi
 
@@ -193,13 +193,4 @@ if [ $? -ne 0 ]; then
 fi
 
 # Display control instructions
-echo "\033[1;33m[INFO] \033[1;37mMinecraft server started successfully."
-echo "\033[1;33m[INFO] \033[1;37mHow to control the server:"
-case $MODE in
-    tmux)
-        echo "\033[1;33m[INFO] \033[1;37mUse: tmux a -t $SESSION_NAME to attach to the tmux session."
-        ;;
-    screen)
-        echo "\033[1;33m[INFO] \033[1;37mUse: screen -r $SESSION_NAME to attach to the screen session."
-        ;;
-esac
+echo "\033[
