@@ -1,6 +1,4 @@
 #!/bin/sh
-# easter egg
-Attempt_Count=${Attempt_Count + 1}
 # screen or tmux
 MODE="${SEPERATE_SCREEN_TYPE}"
 # MyServer_1_7_9
@@ -9,13 +7,7 @@ SESSION_NAME="${NAME}"
 COMMAND="java -jar -Xmx${RAM_GB} ${JAR_FILE} -nogui"
 # /home/peipei/minecraft-server
 WORK_DIR="${CURRENT_DIR}"
-
-
-if [ $Attempt_Count => 3 ]; then
-    echo "Why You Attempting \nThis Build Is Broken Bruh"
-fi
-
-echo "This Is Not Working Yet"
+echo "Why You Attempting \nThis Build Is Broken Bruh"
 exit 1
 
 # Source the .env file
