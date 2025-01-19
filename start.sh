@@ -14,6 +14,10 @@ echo "This Is Not Working Yet"
 Attempt_Count = ${Attempt_Count} + 1
 exit 1
 
+if [ $Attempt_Count => 3 ]; then
+    echo "Why You Attempting \nThis Build Is Broken Bruh"
+fi
+
 # Source the .env file
 if [ -f .env ]; then
     set -o allexport
