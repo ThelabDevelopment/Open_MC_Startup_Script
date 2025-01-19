@@ -1,4 +1,4 @@
-[EN]()
+[EN](https://github.com/ThelabDevelopment/Open_MC_Startup_Script/tree/main?tab=readme-ov-file)
 # Open MC Startup Script
 สคริปเปิดเชิฟมายคราฟและตัว Jar File
 
