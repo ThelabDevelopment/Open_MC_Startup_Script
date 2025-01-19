@@ -1,10 +1,11 @@
 #!/bin/sh
 
-# Default values (used only when bypass flag is provided)
-MODE="tmux"
-RAM_GB="3"  # default RAM allocation in GB
-JAR_FILE="server.jar"  # default JAR file name
-CURRENT_DIR="."  # default working directory
+BYPASS_MODE="tmux"
+BYPASS_RAM_GB="2"
+BYPASS_JAR_FILE="server.jar"
+BYPASS_CURRENT_DIR="."
+COMMAND="java -jar -Xmx${RAM_GB} ${JAR_FILE} -nogui"
+
 
 # Check if we have the --bypass or -bp argument
 if [ "$1" = "--bypass" ] || [ "$1" = "-bp" ]; then
@@ -13,53 +14,46 @@ else
     BYPASS=false
 fi
 
-# If in bypass mode, use predefined variables (no user input)
+# If in bypass mode, use predefined variables with "BYPASS_" prefix ONLY
 if [ "$BYPASS" = true ]; then
-    echo "Bypass mode enabled. Using default values..."
-    echo "Session Manager: $MODE"
-    echo "RAM Allocation: $RAM_GB GB"
-    echo "JAR File: $JAR_FILE"
-    echo "Working Directory: $CURRENT_DIR"
+    echo "Bypass mode enabled. Using predefined variables..."
+
+    # Ensure that BYPASS_ variables are set (MODE, RAM_GB, JAR_FILE, CURRENT_DIR)
+    if [ -z "$BYPASS_MODE" ] || [ -z "$BYPASS_RAM_GB" ] || [ -z "$BYPASS_JAR_FILE" ] || [ -z "$BYPASS_CURRENT_DIR" ]; then
+        echo "Error: Missing required bypass variables (BYPASS_MODE, BYPASS_RAM_GB, BYPASS_JAR_FILE, BYPASS_CURRENT_DIR). Exiting..."
+        exit 1
+    fi
+
+    # Use the bypass variables directly
+    MODE="$BYPASS_MODE"
+    RAM_GB="$BYPASS_RAM_GB"
+    JAR_FILE="$BYPASS_JAR_FILE"
+    CURRENT_DIR="$BYPASS_CURRENT_DIR"
+
 else
-    # If NOT in bypass mode, prompt for inputs
+    # Non-bypass mode: prompt for user input for variables
     echo "Auto Configuration Is Starting..."
-    sleep 0.5
 
-    # Prompt for `SEPERATE_SCREEN_TYPE` if not set
-    if [ -z "$SEPERATE_SCREEN_TYPE" ]; then
-        echo "Enter session manager (screen or tmux):"
-        read -r SEPERATE_SCREEN_TYPE
-    fi
+    # Prompt for `MODE` (screen/tmux)
+    echo "Enter session manager (screen or tmux):"
+    read -r MODE
 
-    # Prompt for `NAME` if not set
-    if [ -z "$NAME" ]; then
-        echo "Enter server name:"
-        read -r NAME
-    fi
+    # Prompt for `RAM_GB`
+    echo "Enter allocated RAM (in GB):"
+    read -r RAM_GB
 
-    # Prompt for `RAM_GB` if not set
-    if [ -z "$RAM_GB" ]; then
-        echo "Enter allocated RAM (in GB):"
-        read -r RAM_GB
-    fi
+    # Prompt for `JAR_FILE`
+    echo "Enter the name of the JAR file (e.g., server.jar):"
+    read -r JAR_FILE
 
-    # Prompt for `JAR_FILE` if not set
-    if [ -z "$JAR_FILE" ]; then
-        echo "Enter the name of the JAR file (e.g., server.jar):"
-        read -r JAR_FILE
-    fi
-
-    # Prompt for `CURRENT_DIR` if not set
-    if [ -z "$CURRENT_DIR" ]; then
-        echo "Enter the current working directory for the server:"
-        read -r CURRENT_DIR
-    fi
+    # Prompt for `CURRENT_DIR`
+    echo "Enter the current working directory for the server:"
+    read -r CURRENT_DIR
 fi
 
-# Show the configuration setup
+# Show the current configuration setup
 echo "---- Current Configuration ----"
 echo "Session Manager: $MODE"
-echo "Server Name: $NAME"
 echo "Allocated RAM: ${RAM_GB}G"
 echo "JAR File: $JAR_FILE"
 echo "Current Directory: $CURRENT_DIR"
@@ -72,8 +66,8 @@ if [ -z "$RAM_GB" ] || [ -z "$JAR_FILE" ]; then
     exit 1
 fi
 
-if [ -z "$SESSION_NAME" ] || [ -z "$COMMAND" ] || [ -z "$WORK_DIR" ] || { [ "$MODE" != "screen" ] && [ "$MODE" != "tmux" ]; }; then
-    echo "\033[1;31m[WARN] Missing or invalid configuration. Exiting..."
+if [ -z "$MODE" ] || { [ "$MODE" != "screen" ] && [ "$MODE" != "tmux" ]; }; then
+    echo "\033[1;31m[WARN] Invalid session manager. Exiting..."
     exit 1
 fi
 
@@ -121,11 +115,9 @@ echo "\033[1;33m[INFO] \033[1;37mMinecraft server started successfully."
 echo "\033[1;33m[INFO] \033[1;37mHow to control the server:"
 case $MODE in
     tmux)
-        echo "\033[1;33m[INFO] \033[1;37mUse: tmux a -t $SESSION_NAME"
+        echo "\033[1;33m[INFO] \033[1;37mUse: tmux a -t $SESSION_NAME to attach to the tmux session."
         ;;
     screen)
-        echo "\033[1;33m[INFO] \033[1;37mUse: screen -r $SESSION_NAME"
+        echo "\033[1;33m[INFO] \033[1;37mUse: screen -r $SESSION_NAME to attach to the screen session."
         ;;
 esac
-
-exit 0
