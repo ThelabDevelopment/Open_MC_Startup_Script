@@ -1,7 +1,27 @@
 #!/bin/sh
 
-# Function to setup environment variables
-setup_env() {
+# Default values (used only when bypass flag is provided)
+MODE="screen"
+RAM_GB="2"  # default RAM allocation in GB
+JAR_FILE="server.jar"  # default JAR file name
+CURRENT_DIR="."  # default working directory
+
+# Check if we have the --bypass or -bp argument
+if [ "$1" = "--bypass" ] || [ "$1" = "-bp" ]; then
+    BYPASS=true
+else
+    BYPASS=false
+fi
+
+# If in bypass mode, use predefined variables (no user input)
+if [ "$BYPASS" = true ]; then
+    echo "Bypass mode enabled. Using default values..."
+    echo "Session Manager: $MODE"
+    echo "RAM Allocation: $RAM_GB GB"
+    echo "JAR File: $JAR_FILE"
+    echo "Working Directory: $CURRENT_DIR"
+else
+    # If NOT in bypass mode, prompt for inputs
     echo "Auto Configuration Is Starting..."
     sleep 0.5
 
@@ -9,72 +29,41 @@ setup_env() {
     if [ -z "$SEPERATE_SCREEN_TYPE" ]; then
         echo "Enter session manager (screen or tmux):"
         read -r SEPERATE_SCREEN_TYPE
-        echo "SEPERATE_SCREEN_TYPE=$SEPERATE_SCREEN_TYPE" >> .env
     fi
 
     # Prompt for `NAME` if not set
     if [ -z "$NAME" ]; then
         echo "Enter server name:"
         read -r NAME
-        echo "NAME=$NAME" >> .env
     fi
 
     # Prompt for `RAM_GB` if not set
     if [ -z "$RAM_GB" ]; then
         echo "Enter allocated RAM (in GB):"
         read -r RAM_GB
-        echo "RAM_GB=$RAM_GB" >> .env
     fi
 
     # Prompt for `JAR_FILE` if not set
     if [ -z "$JAR_FILE" ]; then
         echo "Enter the name of the JAR file (e.g., server.jar):"
         read -r JAR_FILE
-        echo "JAR_FILE=$JAR_FILE" >> .env
     fi
 
     # Prompt for `CURRENT_DIR` if not set
     if [ -z "$CURRENT_DIR" ]; then
         echo "Enter the current working directory for the server:"
         read -r CURRENT_DIR
-        echo "CURRENT_DIR=$CURRENT_DIR" >> .env
     fi
-
-    # Source the .env file to load variables
-    set -o allexport
-    source .env
-    set +o allexport
-}
-
-# Function to show the configuration
-showcfg() {
-    echo "---- Current Configuration ----"
-    echo "Session Manager: $SEPERATE_SCREEN_TYPE"
-    echo "Server Name: $NAME"
-    echo "Allocated RAM: ${RAM_GB}G"
-    echo "JAR File: $JAR_FILE"
-    echo "Current Directory: $CURRENT_DIR"
-    echo "------------------------------"
-}
-
-# Check if .env file exists, if not, create one
-if [ ! -f .env ]; then
-    echo ".env file not found. Creating one..."
-    touch .env
 fi
 
-# Source the .env file to check for existing variables
-set -o allexport
-source .env
-set +o allexport
-
-# Setup environment if necessary
-if [ -z "$SEPERATE_SCREEN_TYPE" ] || [ -z "$NAME" ] || [ -z "$RAM_GB" ] || [ -z "$JAR_FILE" ] || [ -z "$CURRENT_DIR" ]; then
-    setup_env
-fi
-
-# Show the current configuration
-showcfg
+# Show the configuration setup
+echo "---- Current Configuration ----"
+echo "Session Manager: $MODE"
+echo "Server Name: $NAME"
+echo "Allocated RAM: ${RAM_GB}G"
+echo "JAR File: $JAR_FILE"
+echo "Current Directory: $CURRENT_DIR"
+echo "------------------------------"
 
 # Validate required variables
 if [ -z "$RAM_GB" ] || [ -z "$JAR_FILE" ]; then
@@ -89,9 +78,9 @@ if [ -z "$SESSION_NAME" ] || [ -z "$COMMAND" ] || [ -z "$WORK_DIR" ] || { [ "$MO
 fi
 
 # Navigate to the working directory
-cd "$WORK_DIR" || { echo "\033[1;31m[ERROR] Failed to access working directory: $WORK_DIR"; exit 1; }
+cd "$CURRENT_DIR" || { echo "\033[1;31m[ERROR] Failed to access working directory: $CURRENT_DIR"; exit 1; }
 
-# Display configuration
+# Display the current configuration before startup
 echo "Current Allocated RAM: ${RAM_GB}G"
 echo "Current Java JAR File: $JAR_FILE"
 sleep 0.5
