@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Default values (used only when bypass flag is provided)
-MODE="screen"
-RAM_GB="2"  # default RAM allocation in GB
+MODE="tmux"
+RAM_GB="3"  # default RAM allocation in GB
 JAR_FILE="server.jar"  # default JAR file name
 CURRENT_DIR="."  # default working directory
 
